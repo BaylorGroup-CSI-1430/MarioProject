@@ -6,6 +6,7 @@
 //  Copyright © 2018 Hao Sheng. All rights reserved.
 //
 
+//
 //  main.cpp
 //  MarioProject
 //
@@ -34,7 +35,7 @@ int main(int argc, char ** argv)
     int height = 20;
     int X = 200;
     int Y = 200;
-     int velo = 10;
+     int velo = 5;
     bool jump = true;
     
     while (!g.getQuit())
@@ -44,28 +45,39 @@ int main(int argc, char ** argv)
         if(g.getKey() == DOWN_ARROW)    // allows you to move
         {
             g.playSound("jump-big.wav");
-            Y += 1;    // ensures you do not go off screen
+            Y = min(Y + 1, windowWidth - width);    // ensures you do not go off screen
         }
         else if (g.getKey() == UP_ARROW)
         {
             
-            g.plotPixel(5, 5, 123, 123, 123);
+            //g.plotPixel(5, 5, 123, 123, 123);
             
             int Yold = Y;
             
-            while(jump == true)
+            
+            for(int i = 0; i < 6; i++)
+            {
+                X+=1;
+                if(i <= 2)
+                    Y-=velo;
+                else if(i<=5 && i >=3)
+                    Y+=velo;
+                g.update();
+                g.sleep(10);
+            }
+            /*while(jump == true)
             {
                 X+=2;
-                Y-=velo;
-                velo-=0.5;
-                
+                Y-= velo;
+                velo-=;
+                //g.update();
                 if(Y == Yold){
                     jump = false;
                 }
-                
+                cout << Y << " " << X << " " << endl;
             }
             jump = true;
-           
+           */
             
         }
         else if (g.getKey() == RIGHT_ARROW)
