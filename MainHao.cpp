@@ -5,9 +5,17 @@
 //  Created by hao sheng wu on 11/11/18.
 //  Copyright © 2018 Hao Sheng. All rights reserved.
 //
+
+//  main.cpp
+//  MarioProject
+//
+//  Created by hao sheng wu on 11/11/18.
+//  Copyright © 2018 Hao Sheng. All rights reserved.
+//
 #include <iostream>
 #include <stdlib.h>
 #include <string.h>
+#include <string>
 #include <math.h>
 #include <stdio.h>
 #include "SDL_Plotter.h"
@@ -16,7 +24,7 @@ using namespace std;
 
 int main(int argc, char ** argv)
 {
-    const int windowHeight = 600;
+    const int windowHeight = 500;
     const int windowWidth = 1000;
     SDL_Plotter g(windowHeight,windowWidth);   // makes width and height of play window
     
@@ -24,28 +32,50 @@ int main(int argc, char ** argv)
     
     int width = 20;
     int height = 20;
-    int posX = 300;
-    int posY = 300;
+    int X = 200;
+    int Y = 200;
+     int velo = 10;
+    bool jump = true;
     
     while (!g.getQuit())
     {
+       
         //input
         if(g.getKey() == DOWN_ARROW)    // allows you to move
         {
-            posY = min(posY + 4, windowHeight - height);    // ensures you do not go off screen
+            g.playSound("jump-big.wav");
+            Y += 1;    // ensures you do not go off screen
         }
         else if (g.getKey() == UP_ARROW)
         {
-            posY = max(posY - 2,0);
+            
+            g.plotPixel(5, 5, 123, 123, 123);
+            
+            int Yold = Y;
+            
+            while(jump == true)
+            {
+                X+=2;
+                Y-=velo;
+                velo-=0.5;
+                
+                if(Y == Yold){
+                    jump = false;
+                }
+                
+            }
+            jump = true;
+           
             
         }
         else if (g.getKey() == RIGHT_ARROW)
         {
-            posX = min(posX + 4, windowWidth - width);
+              g.playSound("jump-big.wav");
+            X = min(X + 1, windowWidth - width);
         }
         else if (g.getKey() == LEFT_ARROW)
         {
-            posX = max(posX - 4, 0);
+            X = max(X - 1, 0);
         }
         
         // draw background
@@ -53,15 +83,16 @@ int main(int argc, char ** argv)
         {
             for (int row = 0; row < windowHeight; row++)
             {
-                g.plotPixel(col,row, 300,225,225);
+                g.plotPixel(col,row, 300,200,225);
+                
             }
         }
-        // draw loop
-        for (int col = posX; col < width + posX; col++)   // goes through all columns
+        //draw mario
+        for ( int col = X; col < width + X; col++)
         {
-            for (int row = posY; row < height + posY; ++row)
+            for (int row = Y; row < height + Y; ++row)
             {
-                g.plotPixel(col,row, 23,10,204);
+                g.plotPixel(col,row,10,20,30);
             }
         }
         
@@ -69,11 +100,11 @@ int main(int argc, char ** argv)
             g.getKey();
         }
         
-        
-        
         g.update();
     }
 }
+
+
 
 
 
